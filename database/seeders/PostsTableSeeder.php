@@ -25,11 +25,12 @@ class PostsTableSeeder extends Seeder
                 'title' => $faker->sentence($nbWords=5,$variableNbWords = true),
                 'excerpt' => $faker-> text($maxNbChars=100),
                 'content' => $faker->paragraph(5,true),
-                'image' => $faker->image('public/storage/images',640,480,null,false),
+                'image' => $faker->image('public/gambar',300,250,null,false),
                 'author_id' =>$faker->randomElement($author_id),
                 'updated_at' =>$faker->dateTime($max='now',$timezone=null),
                 'created_at' =>$faker->dateTime($max='now',$timezone=null),
             ];
+
         }
         DB::table("posts")->insert($posts);
     }

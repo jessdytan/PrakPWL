@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Models\Post;
 
 class AdminController extends Controller
 {
@@ -17,7 +18,8 @@ class AdminController extends Controller
 
     public function show_postingan()
     {
-        return view('admin.postingan');
+        $posts = Post::select('title','excerpt','content','image')->get();
+        return view('admin.postingan', compact('posts'));
     }
 
     public function show_arsip()
@@ -51,17 +53,45 @@ class AdminController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create_post()
     {
-        //
+        return view('admin.create_post');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store_post(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' =>"required|min:5|max:100",
+            'excerpt' =>"required|min:20|max:150",
+            'content' =>"required|min:50",
+            'image' =>"image|mimes:jpeg,jpg,png|max:4096"
+        ]);
+
+        $new_post = new Post;
+        $new_post ->title = $request->title;
+        $new_post ->excerpt = $request->excerpt;
+        $new_post ->content = $request->content;
+        $new_post ->author_id = $request->author_id;
+
+        if($request->hasFile('image')){
+            //define image location in local path
+            $location = public_path('gambar/');
+
+            //ambil file image dan simpan ke local server
+            $request->file('image')->move($location,$request->file('image')->getClientOriginalName());
+
+            //simpan nama file di database
+            $new_post->image = $request->file('image')->getClientOriginalName();
+        }
+        
+
+        $new_post->save();
+
+        return redirect('admin/postingan')->with('status','Postingan Berhasil!');
+
     }
 
     /**

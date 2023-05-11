@@ -29,6 +29,8 @@ Route::match(['get', 'post'], '/detail_mahasiswa',[MahasiswaController::class,'d
 use App\Http\Controllers\AdminController;
 Route::get('/admin/dashboard',[AdminController::class,'index']);
 Route::get('/admin/postingan',[AdminController::class,'show_postingan']);
+Route::get('/admin/create_post',[AdminController::class,'create_post']);
+Route::post('/admin/store_post',[AdminController::class,'store_post']);
 Route::get('/admin/arsip',[AdminController::class,'show_arsip']);
 Route::get('/admin/invoice',[AdminController::class,'show_invoice']);
 Route::get('/admin/review',[AdminController::class,'show_review']);
